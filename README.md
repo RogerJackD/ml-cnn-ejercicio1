@@ -1,5 +1,14 @@
 muestra rapida de dataset:
 
+Exportación del Modelo
+El modelo se guarda en 3 formatos:
+
+Keras H5: flowers_model.h5
+
+TensorFlow.js: Carpeta tfjs_model/ comprimida en tfjs_model.zip
+
+SavedModel: Carpeta saved_model/ comprimida en saved_model.zip
+
 ![image](https://github.com/user-attachments/assets/44259291-4777-4a82-9eb4-5a0ae889cb85)
 
 
@@ -17,3 +26,4 @@ GRAFICA DE PRECISION Y PERDIDAS:
 
 test:
 ![image](https://github.com/user-attachments/assets/fb01583d-8fee-4cfd-96f9-fa1c38602e44)
+
