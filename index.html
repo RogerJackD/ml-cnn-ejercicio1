@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clasificador de Flores</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+</head>
+<body>
+    <h1>Clasificador de Flores</h1>
+    <input type="file" id="imageUpload" accept="image/*">
+    <img id="preview" style="max-width: 300px; display: none;">
+    <h2 id="result"></h2>
+    
+    <script>
+        let model;
+        
+        // Cargar el modelo
+        async function loadModel() {
+            model = await tf.loadLayersModel('model.json');
+            console.log('Modelo cargado');
+        }
+        
+        // Procesar la imagen subida
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.getElementById('preview');
+                    img.src = event.target.result;
+                    img.style.display = 'block';
+                    
+                    // Clasificar la imagen
+                    classifyImage(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Clasificar la imagen
+        async function classifyImage(imgElement) {
+            // Preprocesar la imagen
+            const tensor = tf.browser.fromPixels(imgElement)
+                .resizeNearestNeighbor([150, 150])
+                .toFloat()
+                .div(tf.scalar(255.0))
+                .expandDims();
+            
+            // Hacer la predicción
+            const predictions = await model.predict(tensor).data();
+            const predictedClass = predictions.indexOf(Math.max(...predictions));
+            
+            // Mostrar resultado
+            document.getElementById('result').innerText = `Flor clasificada como: ${predictedClass}`;
+            
+            // Liberar memoria
+            tensor.dispose();
+        }
+        
+        // Cargar el modelo al iniciar
+        loadModel();
+    </script>
+</body>
+</html>
